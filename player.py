@@ -9,6 +9,7 @@ class Player:
         self.velocity_x = 0
         self.velocity_y = 0
         self.jump_strength = -8
+        self.dead = False
 
     def handle_inputs(self, events, left, right, up):
         keys = pygame.key.get_pressed()
@@ -36,11 +37,10 @@ class Player:
             self.rect.bottom = 600
             self.velocity_y = 0
 
-        if (
-            self.rect.colliderect(collider.upper_rect)
-            or self.rect.colliderect(collider.lower_rect)
-        ):
-            pygame.quit()
+        if (self.rect.colliderect(collider.upper_rect) or self.rect.colliderect(collider.lower_rect)):
+            self.dead = True
+            return self.dead
+            
 
     def draw(self, screen, colour):
         pygame.draw.rect(screen, colour, self.rect)
