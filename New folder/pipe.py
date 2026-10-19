@@ -1,0 +1,67 @@
+import pygame
+import random
+
+class Pipe:
+    def __init__(self, gap, gap_y):
+        self.gap = gap
+        self.gap_y = gap_y
+        self.upper_rect = pygame.Rect(650, 0, 50, gap_y)
+        self.lower_rect = pygame.Rect(650, gap_y + gap, 50, 1000)
+        self.stop_updating = False
+        self.speed = 5
+        self.score = 0
+        self.passed = False
+
+   
+        
+
+    def update( self, player, player2):
+        if self.stop_updating == False:
+            if self.upper_rect.x < -50:
+                self.upper_rect.x = 650
+                self.lower_rect.x = 650
+                self.passed = False
+                self.speed += 0.1
+
+                self.gap_y = random.randint(30, 550)
+                self.upper_rect.height = self.gap_y
+                self.lower_rect.y = self.gap_y + self.gap
+                
+            self.upper_rect.x -= self.speed
+            self.lower_rect.x -= self.speed
+
+        if player.rect.x and player2.rect.x > self.upper_rect.x and self.passed == False:
+            self.score += 1
+            self.passed = True
+        return self.score
+
+
+    def highscore(self, dead, dead2):
+        if dead or dead2:
+            with open("high_score.txt", "r") as h:
+                if self.score > int(h.read()):
+
+                    with open("high_score.txt", "w") as h:
+                        h.write(str(self.score))
+            
+
+    
+
+    def reset(self, gap, gap_y):
+        self.gap = gap
+        self.gap_y = gap_y
+        self.upper_rect.x = 650
+        self.upper_rect.height = 0
+        self.lower_rect.x = 650
+        self.lower_rect.y = gap_y + gap
+        self.stop_updating = False
+        self.speed = 5
+        self.score = 0
+        self.passed = False
+
+
+
+    def draw(self, screen):
+        if self.stop_updating == False:
+            pygame.draw.rect(screen, (0, 255, 0), self.upper_rect)
+            pygame.draw.rect(screen, (0, 255, 0), self.lower_rect)
