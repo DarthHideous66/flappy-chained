@@ -43,14 +43,14 @@ class Player:
         return self.dead
             
 
-    def reset(self, x, y):
+    def reset(self, x, y, speed=5, gravity=0.5, jump_strength=-8, velocity_x=0, velocity_y=0):
         self.rect.x = x
         self.rect.y = y
-        self.speed = 5
-        self.gravity = 0.5
-        self.velocity_x = 0
-        self.velocity_y = 0
-        self.jump_strength = -8
+        self.speed = speed
+        self.gravity = gravity
+        self.velocity_x = velocity_x
+        self.velocity_y = velocity_y
+        self.jump_strength = jump_strength
         self.dead = False
 
     def draw(self, screen, colour):

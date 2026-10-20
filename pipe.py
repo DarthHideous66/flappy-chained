@@ -47,12 +47,12 @@ class Pipe:
 
     
 
-    def reset(self, gap, gap_y):
+    def reset(self, gap, gap_y, upper_x=650, lower_x=650, upper_height=0):
         self.gap = gap
         self.gap_y = gap_y
-        self.upper_rect.x = 650
-        self.upper_rect.height = 0
-        self.lower_rect.x = 650
+        self.upper_rect.x = upper_x
+        self.upper_rect.height = upper_height
+        self.lower_rect.x = lower_x
         self.lower_rect.y = gap_y + gap
         self.stop_updating = False
         self.speed = 5
