@@ -15,7 +15,7 @@ class Pipe:
    
         
 
-    def update(self, player, player2):
+    def update( self, player, player2):
         if self.stop_updating == False:
             if self.upper_rect.x < -50:
                 self.upper_rect.x = 650
@@ -38,11 +38,27 @@ class Pipe:
 
     def highscore(self, dead, dead2):
         if dead or dead2:
-            with open("high_score.txt", "w") as h:
-                h.write(str(self.score))
-            pygame.quit()
+            with open("high_score.txt", "r") as h:
+                if self.score > int(h.read()):
+
+                    with open("high_score.txt", "w") as h:
+                        h.write(str(self.score))
+            
 
     
+
+    def reset(self, gap, gap_y):
+        self.gap = gap
+        self.gap_y = gap_y
+        self.upper_rect.x = 650
+        self.upper_rect.height = 0
+        self.lower_rect.x = 650
+        self.lower_rect.y = gap_y + gap
+        self.stop_updating = False
+        self.speed = 5
+        self.score = 0
+        self.passed = False
+
 
 
     def draw(self, screen):

@@ -39,8 +39,19 @@ class Player:
 
         if (self.rect.colliderect(collider.upper_rect) or self.rect.colliderect(collider.lower_rect)):
             self.dead = True
-            return self.dead
             
+        return self.dead
+            
+
+    def reset(self, x, y):
+        self.rect.x = x
+        self.rect.y = y
+        self.speed = 5
+        self.gravity = 0.5
+        self.velocity_x = 0
+        self.velocity_y = 0
+        self.jump_strength = -8
+        self.dead = False
 
     def draw(self, screen, colour):
         pygame.draw.rect(screen, colour, self.rect)
