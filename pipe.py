@@ -3,21 +3,24 @@ import random
 
 class Pipe:
     def __init__(self, gap, gap_y):
+        self.width = 150
         self.gap = gap
         self.gap_y = gap_y
-        self.upper_rect = pygame.Rect(650, 0, 50, gap_y)
-        self.lower_rect = pygame.Rect(650, gap_y + gap, 50, 1000)
+        self.upper_rect = pygame.Rect(650, 0, self.width, gap_y)
+        self.lower_rect = pygame.Rect(650, gap_y + gap, self.width, 1000)
         self.stop_updating = False
         self.speed = 5
         self.score = 0
         self.passed = False
+        self.image = pygame.image.load("pipe.PNG").convert_alpha()
+        
 
    
         
 
     def update( self, player, player2):
         if self.stop_updating == False:
-            if self.upper_rect.x < -50:
+            if self.upper_rect.right < 0:
                 self.upper_rect.x = 650
                 self.lower_rect.x = 650
                 self.passed = False
@@ -62,6 +65,20 @@ class Pipe:
 
 
     def draw(self, screen):
-        if self.stop_updating == False:
-            pygame.draw.rect(screen, (0, 255, 0), self.upper_rect)
-            pygame.draw.rect(screen, (0, 255, 0), self.lower_rect)
+        # Upper pipe: stretch to fit its rectangle and flip it
+        upper_image = pygame.transform.scale(
+            self.image,
+            (self.upper_rect.width, self.upper_rect.height)
+        )
+        upper_image = pygame.transform.flip(upper_image, False, True)
+        screen.blit(upper_image, self.upper_rect.topleft)
+
+        # Lower pipe: stretch to fit the visible part of the screen
+        lower_height = 600 - self.lower_rect.y
+
+        if lower_height > 0:
+            lower_image = pygame.transform.scale(
+                self.image,
+                (self.lower_rect.width, lower_height)
+            )
+            screen.blit(lower_image, self.lower_rect.topleft)

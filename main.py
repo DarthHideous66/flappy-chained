@@ -8,13 +8,16 @@ from pipe import Pipe
 pygame.init()
 pygame.font.init()
 
-score_font = pygame.font.SysFont('comic sans', 24)
+score_font = pygame.font.SysFont('couriernew', 24)
 WIDTH, HEIGHT = 800, 600
 MAX_DISTANCE = 200
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("My Game")
 game_over = False
 game_started= False
+
+background = pygame.image.load("background.GIF").convert()
+background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 
 # Clock for controlling FPS
 clock = pygame.time.Clock()
@@ -40,17 +43,17 @@ def reset_game():
 # Main game loop
 running = True
 while running:
-    screen.fill((255, 255, 255))
+    screen.blit(background, (0, 0))
 
     with open("high_score.txt", "r") as f:
         highscore = (f.read())
-        print(highscore)
+
 
     if player.dead or player2.dead:
             game_over = True
-            screen.fill((255, 255, 255))
+            screen.blit(background, (0, 0))
             game_over_text = score_font.render(f"Game Over! Press R to Restart or ESC to Quit. High score was {highscore}", 1, (0, 0, 0))
-            screen.blit(game_over_text, (50, 120))
+            screen.blit(game_over_text, (0, 120))
             pygame.display.flip()
         
     events = pygame.event.get()
@@ -120,8 +123,13 @@ while running:
                 player2.velocity_x -= dx * force
                 player2.velocity_y -= dy * force
 
+        player.animate()
+        player2.animate()
 
-            
+        player.draw(screen)
+        player2.draw(screen)
+
+        
         pygame.draw.line(screen, (80, 80, 80), player.rect.center, player2.rect.center, 5)
         player.draw(screen, (0, 0, 255))
         player2.draw(screen, (255, 0, 0))
