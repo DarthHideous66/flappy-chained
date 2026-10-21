@@ -3,7 +3,7 @@ import random
 
 class Pipe:
     def __init__(self, gap, gap_y):
-        self.width = 150
+        self.width = 100
         self.gap = gap
         self.gap_y = gap_y
         self.upper_rect = pygame.Rect(650, 0, self.width, gap_y)
@@ -12,7 +12,7 @@ class Pipe:
         self.speed = 5
         self.score = 0
         self.passed = False
-        self.image = pygame.image.load("pipe.PNG").convert_alpha()
+        self.image = pygame.image.load("pipe.png").convert_alpha()
         
 
    

@@ -1,9 +1,12 @@
 
 import pygame
+import os
 
 class Player:
-    def __init__(self, x, y):
-        self.rect = pygame.Rect(x, y, 40, 25)
+    def __init__(self, x, y, animation_folder):
+        self.width = 80
+        self.height = 50
+        self.rect = pygame.Rect(x, y, self.width, self.height)
         self.speed = 5
         self.gravity = 0.5
         self.velocity_x = 0
@@ -11,16 +14,24 @@ class Player:
         self.jump_strength = -8
         self.dead = False
 
-        self.frame_dict = {0: pygame.image.load("blue-frames/tile000.png").convert_alpha(),
-                            1: pygame.image.load("blue-frames/tile001.png").convert_alpha(),
-                              2: pygame.image.load("blue-frames/tile002.png").convert_alpha(),
-                                3: pygame.image.load("blue-frames/tile003.png").convert_alpha(),
-                                  4: pygame.image.load("blue-frames/tile004.png").convert_alpha(),
-                                    5: pygame.image.load("blue-frames/tile005.png").convert_alpha()
-                           }
+        # Load all animation frames from the chosen folder
+        self.frame_dict = {}
 
-        for key in self.frame_dict:
-            self.frame_dict[key] = pygame.transform.scale(self.frame_dict[key], (40, 30))
+        files = sorted(
+            file for file in os.listdir(animation_folder)
+            if file.endswith(".png")
+        )
+
+        for index, file in enumerate(files):
+            image = pygame.image.load(
+                os.path.join(animation_folder, file)
+            ).convert_alpha()
+
+            image = pygame.transform.scale(
+                image, (self.width, self.height)
+            )
+
+            self.frame_dict[index] = image
 
         self.frame_index = 0
         self.animation_speed = 0.15
@@ -47,14 +58,15 @@ class Player:
 
         if self.animation_timer >= 1:
             self.animation_timer = 0
-            self.frame_index = (self.frame_index + 1) % len(self.frame_dict)
+            self.frame_index = (
+                self.frame_index + 1
+            ) % len(self.frame_dict)
 
         self.image = self.frame_dict[self.frame_index]
 
     def update(self, collider):
         self.velocity_y += self.gravity
 
-        # Apply velocity to movement
         self.rect.x += self.velocity_x
         self.rect.y += self.velocity_y
 
@@ -62,13 +74,18 @@ class Player:
             self.rect.bottom = 600
             self.velocity_y = 0
 
-        if (self.rect.colliderect(collider.upper_rect) or self.rect.colliderect(collider.lower_rect)):
+        if (
+            self.rect.colliderect(collider.upper_rect)
+            or self.rect.colliderect(collider.lower_rect)
+        ):
             self.dead = True
-            
-        return self.dead
-            
 
-    def reset(self, x, y, speed=5, gravity=0.5, jump_strength=-8, velocity_x=0, velocity_y=0):
+        return self.dead
+
+    def reset(
+        self, x, y, speed=5, gravity=0.5,
+        jump_strength=-8, velocity_x=0, velocity_y=0
+    ):
         self.rect.x = x
         self.rect.y = y
         self.speed = speed
@@ -80,4 +97,3 @@ class Player:
 
     def draw(self, screen, colour=None):
         screen.blit(self.image, self.rect)
-        

@@ -22,8 +22,8 @@ background = pygame.transform.scale(background, (WIDTH, HEIGHT))
 # Clock for controlling FPS
 clock = pygame.time.Clock()
 
-player = Player(375, 275)
-player2 = Player(300, 275)
+player = Player(375, 275, "player1-frames")
+player2 = Player(300, 275, "blue-frames")
 pipe = Pipe(350, random.randint(30, 550))
 highscore = 0
 paused = False
